@@ -18,8 +18,9 @@ If you want to join our team you can just open issue requesting an invite and we
 This is GPL-based source so do whatever you want with it.
 
 
-Ok, guys! after few rebuilds in JadeCore team we broke this project. Some people asked me create 3.3.5a fork from Trinity, some told about 5.4.8. So, if you wanna 5.4.8 - please help with PR here:https://github.com/JadeCore/JadeCore or Here:https://github.com/ProjectSkyfire/SkyFire.548 If you wanna 3.3.5a, :https://github.com/TrinityCore/TrinityCoreLet's 
+Ok, guys! after few rebuilds in JadeCore team we broke this project. Some people asked me create 3.3.5a fork from Trinity, some told about 5.4.8. So, if you wanna 5.4.8 - please help with PR here:https://github.com/JadeCore/JadeCore or Here:https://github.com/ProjectSkyfire/SkyFire.548 
+If you wanna 3.3.5a, :https://github.com/TrinityCore/TrinityCore
 
-STOP make many clones and focus on the one goal - playeble Sever! 
+Let's STOP make many clones and focus on the one goal - playeble Sever! 
 
 So, I created this one for people, who can help a little, who wanna play right now, who can make fixes ( not 100% blizzlike but it will be playeble) It's MopCore547 source. with good SmartAI scripts, good C++ improvements, have many Opcodes and Better then JadeCore547 was. Just test it. It's 100% from Private Source to public. You can't find more playebleMop source on public. Source Here:https://github.com/cooler-SAI/MopCore547 If you wanna make this source better and join  for commits, post new issue requered here:https://github.com/cooler-SAI/MopCore547/issues
