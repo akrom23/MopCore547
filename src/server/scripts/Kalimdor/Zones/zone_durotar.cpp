@@ -30,101 +30,206 @@
 ## npc_lazy_peon
 ######*/
 
-enum LazyPeonYells
+enum LazyPeonData
 {
-    SAY_SPELL_HIT1      = 0, // Ow! OK, I'll get back to work, $n!
-    SAY_SPELL_HIT2,          // Ok boss, I get back to tree-hitting.
-    SAY_SPELL_HIT3           // Just was resting eyes! Back to work now!
+	//Spells
+	SPELL_PEON_SLEEPING = 17743,
+	SPELL_AWAKEN_PEON = 19938,
+	//Gameobject
+	GO_LUMBERPILE = 175784,
+	//Quest
+	QUEST_LAZY_PEONS = 25134,
+	//Events
+	EVENT_AWAKEN_PEON = 1,
+	EVENT_IN_POINT,
+	EVENT_HOME,
+	EVENT_PEON_SLEEPING,
+	//Point
+	POINT_1 = 1
 };
 
-enum LazyPeon
-{
-    QUEST_LAZY_PEONS    = 25134,
-    GO_LUMBERPILE       = 175784,
-    SPELL_BUFF_SLEEP    = 17743,
-    SPELL_AWAKEN_PEON   = 19938
-};
-
-// Lazy Peon - 10556.
 class npc_lazy_peon : public CreatureScript
 {
 public:
-    npc_lazy_peon() : CreatureScript("npc_lazy_peon") { }
+	npc_lazy_peon() : CreatureScript("npc_lazy_peon") { }
 
-    struct npc_lazy_peonAI : public ScriptedAI
-    {
-        npc_lazy_peonAI(Creature* creature) : ScriptedAI(creature) { }
+	struct npc_lazy_peonAI : public ScriptedAI
+	{
+		npc_lazy_peonAI(Creature* creature) : ScriptedAI(creature) { }
 
-        bool work, hit, done;
+		void Reset()
+		{
+			events.Reset();
+			events.ScheduleEvent(EVENT_PEON_SLEEPING, 1000);
+		}
 
-        void Reset()
+		void MovementInform(uint32 /*type*/, uint32 id)
+		{
+			if (id == POINT_1)
+				events.ScheduleEvent(EVENT_IN_POINT, 1000);
+		}
+
+		void SpellHit(Unit* caster, const SpellInfo* spell)
+		{
+			if (spell->Id == SPELL_AWAKEN_PEON && caster->GetTypeId() == TYPEID_PLAYER && CAST_PLR(caster)->GetQuestStatus(QUEST_LAZY_PEONS) == QUEST_STATUS_INCOMPLETE)
+			{
+				caster->ToPlayer()->KilledMonsterCredit(me->GetEntry(), me->GetGUID());
+				events.ScheduleEvent(EVENT_AWAKEN_PEON, 500);
+				events.CancelEvent(EVENT_PEON_SLEEPING);
+			}
+		}
+
+		void UpdateAI(uint32 const diff)
+		{
+			events.Update(diff);
+
+			while (uint32 eventId = events.ExecuteEvent())
+			{
+				switch (eventId)
+				{
+				case EVENT_AWAKEN_PEON:
+					me->RemoveAllAuras();
+					Talk(urand(0, 3));
+					if (GameObject* Lumberpile = me->FindNearestGameObject(GO_LUMBERPILE, 20))
+						me->GetMotionMaster()->MovePoint(POINT_1, Lumberpile->GetPositionX() - 1, Lumberpile->GetPositionY(), Lumberpile->GetPositionZ());
+					break;
+				case EVENT_IN_POINT:
+					me->HandleEmoteCommand(EMOTE_STATE_WORK_CHOPWOOD);
+					events.ScheduleEvent(EVENT_HOME, 300000);
+					break;
+				case EVENT_HOME:
+					me->HandleEmoteCommand(EMOTE_STATE_NONE);
+					me->GetMotionMaster()->MoveTargetedHome();
+					events.ScheduleEvent(EVENT_PEON_SLEEPING, 1000);
+					break;
+				case EVENT_PEON_SLEEPING:
+					DoCast(SPELL_PEON_SLEEPING);
+					events.ScheduleEvent(EVENT_PEON_SLEEPING, 120000);
+					break;
+				default:
+					break;
+				}
+			}
+
+			DoMeleeAttackIfReady();
+		}
+
+	private:
+		EventMap events;
+	};
+
+	CreatureAI* GetAI(Creature* creature) const
+	{
+		return new npc_lazy_peonAI(creature);
+	}
+};
+
+/*######
+## Quest 25165: Never Trust a Big Barb and a Smile
+## npc_clattering_scorpid
+######*/
+enum ClatteringScorpidData
+{
+    //Text
+    EMOTE_CLATTERING_SCORPID                    = 0,
+    //npc
+    NPC_POISON_EXTRACTION_TOTEM                 = 39236,
+    //Spell
+    SPELL_SUNDERING_CLEAVE                      = 79687,
+    SPELL_ENVENOM                               = 73672,
+    SPELL_POISON_EXTRACTION_TOTEM               = 73673,
+    //Quest
+    QUEST_NEVER_TRUST_A_BIG_BARB_AND_A_SMILE    = 25165,
+    //Events
+    EVENT_SUNDERING_CLEAVE                      = 1,
+    EVENT_ENVENOM
+};
+
+class npc_clattering_scorpid : public CreatureScript
+{
+    public:
+        npc_clattering_scorpid() : CreatureScript("npc_clattering_scorpid") { }
+
+        struct npc_clattering_scorpidAI : public ScriptedAI
         {
-            work = false;
-            hit = false;
-            done = false;
+            npc_clattering_scorpidAI(Creature* creature) : ScriptedAI(creature) { }
 
-            DoCast(me, SPELL_BUFF_SLEEP);
-        }
-
-        void MovementInform(uint32 /*type*/, uint32 id)
-        {
-            if (id == 1)
-                work = true;
-        }
-
-        void SpellHit(Unit* caster, const SpellInfo* spell)
-        {
-            if (!hit && spell->Id == SPELL_AWAKEN_PEON && caster->GetTypeId() == TYPEID_PLAYER && caster->ToPlayer()->GetQuestStatus(QUEST_LAZY_PEONS) == QUEST_STATUS_INCOMPLETE)
+            void Reset()
             {
-                if (urand(0, 1) == 0)
-                    Talk(SAY_SPELL_HIT1, caster->GetGUID());
-                else
-                    Talk(RAND(SAY_SPELL_HIT2, SAY_SPELL_HIT3));
-
-                me->RemoveAllAuras();
-                caster->ToPlayer()->KilledMonsterCredit(me->GetEntry(), me->GetGUID());
-
-                if (GameObject* Lumberpile = me->FindNearestGameObject(GO_LUMBERPILE, 20))
-                    me->GetMotionMaster()->MovePoint(1, Lumberpile->GetPositionX()-1, Lumberpile->GetPositionY(), Lumberpile->GetPositionZ());
-
-                hit = true;
+                events.Reset();
             }
-        }
-
-        void UpdateAI(uint32 const diff)
-        {
-            if (!hit && !me->HasAura(SPELL_BUFF_SLEEP))
-                me->AddAura(SPELL_BUFF_SLEEP, me);
-
-            if (work && !done)
+            
+            void EnterCombat(Unit* /*who*/)
             {
-                me->HandleEmote(EMOTE_STATE_WORK_CHOPWOOD);
-                me->DespawnOrUnsummon(15000);
-                done = true;
+                events.ScheduleEvent(EVENT_SUNDERING_CLEAVE, urand(4000, 4500));
+                events.ScheduleEvent(EVENT_ENVENOM, urand(2000, 9000));
+            }
+            
+            void SpellHitTarget(Unit* target, const SpellInfo* spell)
+            {
+                if (spell->Id == SPELL_ENVENOM)
+                {
+                    if (Player* player = target->ToPlayer())
+                    {
+                        if (player->HasAura(SPELL_POISON_EXTRACTION_TOTEM))
+                            player->KilledMonsterCredit(NPC_POISON_EXTRACTION_TOTEM);
+                    }
+                }
             }
 
-            if (!UpdateVictim())
-                return;
+            void UpdateAI(uint32 const diff)
+            {
+                if (!UpdateVictim())
+                    return;
 
-            DoMeleeAttackIfReady();
+                events.Update(diff);
+
+                if (me->HasUnitState(UNIT_STATE_CASTING))
+                    return;
+
+                while (uint32 eventId = events.ExecuteEvent())
+                {
+                    switch (eventId)
+                    {
+                        case EVENT_SUNDERING_CLEAVE:
+                            DoCastVictim(SPELL_SUNDERING_CLEAVE);
+                            events.ScheduleEvent(EVENT_SUNDERING_CLEAVE, urand(32000, 38000));
+                            break;
+                        case EVENT_ENVENOM:
+                            if (Player* player = me->getVictim()->ToPlayer())
+                            {
+                                if (player->GetQuestStatus(QUEST_NEVER_TRUST_A_BIG_BARB_AND_A_SMILE) == QUEST_STATUS_INCOMPLETE)
+                                    Talk(EMOTE_CLATTERING_SCORPID, player->GetGUID());
+                            }
+                            DoCastVictim(SPELL_ENVENOM);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                DoMeleeAttackIfReady();
+            }
+
+            private:
+                EventMap events;
+        };
+
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return new npc_clattering_scorpidAI(creature);
         }
-    };
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new npc_lazy_peonAI(creature);
-    }
 };
 
 enum VoodooSpells
 {
-    SPELL_BREW      = 16712, // Special Brew
-    SPELL_GHOSTLY   = 16713, // Ghostly
-    SPELL_HEX1      = 16707, // Hex
-    SPELL_HEX2      = 16708, // Hex
-    SPELL_HEX3      = 16709, // Hex
-    SPELL_GROW      = 16711, // Grow
-    SPELL_LAUNCH    = 16716, // Launch (Whee!)
+    SPELL_BREW = 16712, // Special Brew
+    SPELL_GHOSTLY = 16713, // Ghostly
+    SPELL_HEX1 = 16707, // Hex
+    SPELL_HEX2 = 16708, // Hex
+    SPELL_HEX3 = 16709, // Hex
+    SPELL_GROW = 16711, // Grow
+    SPELL_LAUNCH = 16716, // Launch (Whee!)
 };
 
 // Voodoo - 17009.
@@ -275,6 +380,7 @@ enum Watershed // quest 25187 item 52514 spell 73817 http://www.youtube.com/watc
 void AddSC_durotar()
 {
     new npc_lazy_peon();
+    new npc_clattering_scorpid();
     new spell_voodoo();
     new npc_bblade_cultist();
 }
