@@ -37,3 +37,4 @@ Mists of Pandaria Misc TODO:
 -- Items: 112327, 112326
 -- Fix all DB Logs Errors
 -- fix Random not working Quests in the world
+-- AOE Looting
