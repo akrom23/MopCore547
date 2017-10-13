@@ -6,8 +6,6 @@ Mists of Pandaria SmartAI Scripts TODO:
 
 Pandaria Zones:
 
--- Krasarang Wilds
-
 -- Kun-Lai Summit
 
 -- Townlong Steppes
