@@ -9,7 +9,6 @@ class mob_master_shang_xi : public CreatureScript
 {
     enum master_shang
     {
-
         SPELL_MASTERS_FLAME = 114610,
         SPELL_CREATE_MASTERS_FLAME = 114611,
         SPELL_SNATCH_MASTERS_FLAME = 114746,
@@ -172,11 +171,11 @@ class mob_tushui_trainee : public CreatureScript
 
         struct mob_tushui_trainee_AI : public ScriptedAI
         {
-            mob_tushui_trainee_AI(Creature* creature) : ScriptedAI(creature)
-            {
-            }
+            mob_tushui_trainee_AI(Creature* creature) : ScriptedAI(creature) { }
 
+            EventMap events;
             bool isInCombat;
+            bool outOfCombatEmotes;
             uint64 playerGUID;
             uint32 punch1;
             uint32 punch2;
@@ -184,11 +183,13 @@ class mob_tushui_trainee : public CreatureScript
 
             void Reset()
             {
+                events.Reset();
                 punch1 = 1000;
                 punch2 = 3500;
                 punch3 = 6000;
                 playerGUID = 0;
                 isInCombat = false;
+                outOfCombatEmotes = true;
                 me->SetReactState(REACT_DEFENSIVE);
                 me->setFaction(7);
                 me->SetFullHealth();
@@ -203,18 +204,19 @@ class mob_tushui_trainee : public CreatureScript
                     if(attacker && attacker->GetTypeId() == TYPEID_PLAYER)
                         attacker->ToPlayer()->KilledMonsterCredit(54586, 0);
 
+                    me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_NONE);
                     damage = 0;
                     me->CombatStop();
                     isInCombat = false;
-                    me->HandleEmote(EMOTE_ONESHOT_SALUTE);
-                    Talk(urand(0, 7));
-                    me->GetMotionMaster()->MovePoint(0, 1446.322876f, 3389.027588f, 173.782471f);
+                    outOfCombatEmotes = false;
+                    events.ScheduleEvent(1, 1 * IN_MILLISECONDS);
                 }
             }
 
             void EnterCombat(Unit* unit)
             {
                 isInCombat = true;
+                outOfCombatEmotes = false;
             }
 
             void JustRespawned()
@@ -229,7 +231,8 @@ class mob_tushui_trainee : public CreatureScript
                     DoMeleeAttackIfReady();
                     return;
                 }
-                else
+
+                if (outOfCombatEmotes)
                 {
                     if (punch1 <= diff)
                     {
@@ -256,8 +259,26 @@ class mob_tushui_trainee : public CreatureScript
                         punch3 -= diff;
                 }
 
-                if (me->GetPositionX() == 1446.322876f && me->GetPositionY() == 3389.027588f && me->GetPositionZ() == 173.782471f)
-                    me->ForcedDespawn(1000);
+                events.Update(diff);
+
+                while (uint32 eventId = events.ExecuteEvent())
+                {
+                    switch (eventId)
+                    {
+                        case 1:
+                            me->HandleEmoteCommand(EMOTE_ONESHOT_SALUTE);
+                            events.ScheduleEvent(2, 4 * IN_MILLISECONDS);
+                        break;
+                        case 2:
+                            Talk(urand(0, 7));
+                            events.ScheduleEvent(3, 3 * IN_MILLISECONDS);
+                        break;
+                        case 3:
+                            me->ForcedDespawn(2000);
+                            me->GetMotionMaster()->MovePoint(0, 1446.322876f, 3389.027588f, 173.782471f);
+                        break;
+                    }
+                }
             }
         };
 };
