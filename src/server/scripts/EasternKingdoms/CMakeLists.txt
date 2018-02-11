@@ -64,7 +64,6 @@ file(GLOB_RECURSE sources_ThroneOfTheTides EasternKingdoms/ThroneOfTheTides/*.h 
 file(GLOB_RECURSE sources_BlackrockCaverns EasternKingdoms/BlackrockCaverns/*.h EasternKingdoms/BlackrockCaverns/*.cpp)
 # Zones
 file(GLOB_RECURSE sources_Zones EasternKingdoms/Zones/*.h EasternKingdoms/Zones/*.cpp)
-)
 
 set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
