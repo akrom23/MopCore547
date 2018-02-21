@@ -1033,12 +1033,6 @@ class npc_qems_worgen  : public CreatureScript
         {
             creature_script_impl(Creature* creature) : ScriptedAI(creature) { }
 
-            enum
-            {
-                EVENT_START_RUN     = 1,
-                EVENT_FINISH_RUN    = 2,
-            };
-
             EventMap events;
 
             void InitializeAI() 
@@ -1049,7 +1043,7 @@ class npc_qems_worgen  : public CreatureScript
 
             void isSummonedBy(Unit* /*summoner*/) 
             {
-                events.ScheduleEvent(EVENT_START_RUN, 1500);
+                events.ScheduleEvent(EVENT_START_RUN, 1.5 * IN_MILLISECONDS);
             }
 
             void UpdateAI(uint32 const diff) 
@@ -1062,7 +1056,7 @@ class npc_qems_worgen  : public CreatureScript
                     {
                         case EVENT_START_RUN:
                             {
-                                if (GameObject* go = me->FindNearestGameObject(195327, 10.f))
+                                if (GameObject* go = me->FindNearestGameObject(GO_MERCHANT_SQUARE_DOOR, 10.f))
                                 {
                                     float x, y, z;
                                     me->GetPosition(x, y, z);
@@ -1082,7 +1076,7 @@ class npc_qems_worgen  : public CreatureScript
                                     init.SetUncompressed();
                                     init.Launch();
 
-                                    events.ScheduleEvent(EVENT_FINISH_RUN, 10000);
+                                    events.ScheduleEvent(EVENT_FINISH_RUN, 10 * IN_MILLISECONDS);
                                 }
                             }
                             break;
@@ -1158,13 +1152,6 @@ class spell_gilneas_knocking  : public SpellScriptLoader
         }
 };
 
-// Class Trainers
-enum
-{
-    TRAINER_SAY_QUEST_BEGIN     = 1,
-    TRAINER_SAY_QUEST_DONE      = 2,
-};
-
 class npc_gilneas_class_trainer  : public CreatureScript
 {
     public:
@@ -1228,13 +1215,6 @@ class npc_myriam_spellwaker  : public CreatureScript
         {
             creature_script_impl(Creature* creature) : ScriptedAI(creature) { }
 
-            enum
-            {
-                EVENT_CAST_FROSTBOLT    = 1,
-
-                SPELL_FROSTBOLT         = 11538,
-            };
-
             EventMap events;
 
             void InitializeAI() 
@@ -1262,7 +1242,7 @@ class npc_myriam_spellwaker  : public CreatureScript
 
             void EnterCombat(Unit* /*who*/) 
             {
-                events.ScheduleEvent(EVENT_CAST_FROSTBOLT, 250);
+                events.ScheduleEvent(EVENT_CAST_FROSTBOLT, 0.5 * IN_MILLISECONDS);
             }
 
             void UpdateAI(uint32 const diff) 
@@ -1275,7 +1255,7 @@ class npc_myriam_spellwaker  : public CreatureScript
                 if (events.ExecuteEvent() == EVENT_CAST_FROSTBOLT)
                 {
                     me->CastSpell(me->getVictim(), SPELL_FROSTBOLT, false);
-                    events.ScheduleEvent(EVENT_CAST_FROSTBOLT, 3000);
+                    events.ScheduleEvent(EVENT_CAST_FROSTBOLT, 3 * IN_MILLISECONDS);
                 }
             }
         };
@@ -1349,26 +1329,12 @@ class npc_gilneas_worgen_class_quest  : public CreatureScript
         {
             creature_script_impl(Creature* creature) : ScriptedAI(creature) { }
 
-            enum
-            {
-                SPELL_ENRAGE            = 8599,
-
-                SPELL_CHARGE            = 100,
-                SPELL_EVISCERATE        = 2098,
-                SPELL_CORRUPTION        = 172,
-                SPELL_STEADY_SHOT       = 56641,
-                SPELL_FROST_NOVA        = 122,
-                SPELL_MOONFIRE          = 8921,
-
-                NPC_CLASS_QUEST_CREDIT  = 44175,
-            };
-
             bool enrage;
 
             void Reset() 
             {
                 enrage = false;
-                me->m_Events.AddEvent(new AggroEvent(me), me->m_Events.CalculateTime(500));
+                me->m_Events.AddEvent(new AggroEvent(me), me->m_Events.CalculateTime(0.5 * IN_MILLISECONDS));
             }
 
             void SpellHit(Unit* caster, const SpellInfo* spell) 
@@ -1434,14 +1400,6 @@ class npc_wounded_guard_class_quest  : public CreatureScript
         {
             creature_script_impl(Creature* creature) : ScriptedAI(creature) { }
 
-            enum
-            {
-                SPELL_FLASH_HEAL        = 2061,
-                SPELL_REJUVENATION      = 774,
-
-                NPC_CLASS_QUEST_CREDIT  = 44175,
-            };
-
             bool enrage;
 
             void Reset() 
@@ -1479,19 +1437,6 @@ class npc_king_genn_greymane_phase_2  : public CreatureScript
         npc_king_genn_greymane_phase_2() : CreatureScript("npc_king_genn_greymane_phase_2") { }
 
     private:
-        enum
-        {
-            NPC_LORD_GODFREY        = 35115,
-            NPC_KING_GENN_GREYMANE  = 35112,
-
-            LORD_GODFREY_TEXT       = 1,
-            KING_GENN_GREYMANE_TEXT = 1,
-
-            EVENT_UPDATE_PSC        = 1,
-
-            TYPE_PSC_PLAYER_GUID    = 1,
-        };
-
         class PersonalTalkEvent  : public BasicEvent
         {
             public:

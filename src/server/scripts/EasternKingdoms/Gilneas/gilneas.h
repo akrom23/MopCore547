@@ -5,6 +5,11 @@ enum GilneasCreatures
     NPC_PANICKED_CITIZEN_2                  = 44086,
 
     NPC_QEMS_KILL_CREDIT                    = 35830,
+
+    NPC_CLASS_QUEST_CREDIT                  = 44175,
+
+    NPC_LORD_GODFREY                        = 35115,
+    NPC_KING_GENN_GREYMANE                  = 35112,
 };
 
 enum GilneasObject
@@ -27,6 +32,12 @@ enum GilneasTexts
     LIAM_RANDOM_TEXT                        = 1,
 
     CITIZEN_RANDOM_TEXT_2                   = 1,
+
+    TRAINER_SAY_QUEST_BEGIN                 = 1,
+    TRAINER_SAY_QUEST_DONE                  = 2,
+
+    LORD_GODFREY_TEXT                       = 1,
+    KING_GENN_GREYMANE_TEXT                 = 1,
 };
 
 enum GilneasSpells
@@ -64,7 +75,18 @@ enum GilneasSpells
 
     SPELL_SHOOT                             = 20463,
 
+    SPELL_FROSTBOLT                         = 11538,
 
+    SPELL_ENRAGE                            = 8599,
+    SPELL_CHARGE                            = 100,
+    SPELL_EVISCERATE                        = 2098,
+    SPELL_CORRUPTION                        = 172,
+    SPELL_STEADY_SHOT                       = 56641,
+    SPELL_FROST_NOVA                        = 122,
+    SPELL_MOONFIRE                          = 8921,
+
+    SPELL_FLASH_HEAL                        = 2061,
+    SPELL_REJUVENATION                      = 774,
 };
 
 enum GilneasQuests
@@ -144,6 +166,18 @@ enum GilneasEvents
 
     EVENT_FINISH_RUN                        = 12,
     EVENT_RUN_AWAY                          = 13,
+
+    EVENT_START_RUN                         = 14,
+    EVENT_FINISH_RUN                        = 15,
+
+    EVENT_CAST_FROSTBOLT                    = 16,
+
+    EVENT_UPDATE_PSC                        = 17,
+};
+
+enum GilneasTypes
+{
+    TYPE_PSC_PLAYER_GUID                    = 1,
 };
 
 #define    TELL_ME_ABOUT_GATHERING_AND_MINING_PROFESSIONS    "Tell me about gathering professions."

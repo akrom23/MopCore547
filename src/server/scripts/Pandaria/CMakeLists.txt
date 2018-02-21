@@ -9,21 +9,21 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 # Gate of the Setting Sun
-file(GLOB_RECURSE sources_GateSettingSun Pandaria/GateSettingSun/*.h Pandaria/GateSettingSun/*.cpp)
+file(GLOB_RECURSE sources_GateOfTheSettingSun Pandaria/GateOfTheSettingSun/*.h Pandaria/GateOfTheSettingSun/*.cpp)
 # Heart of Fear
 file(GLOB_RECURSE sources_HeartOfFear Pandaria/HeartOfFear/*.h Pandaria/HeartOfFear/*.cpp)
 # Mogushan Palace
 file(GLOB_RECURSE sources_MogushanPalace Pandaria/MogushanPalace/*.h Pandaria/MogushanPalace/*.cpp)
 # Mogushan Vaults
-file(GLOB_RECURSE sources_MogushanVault Pandaria/MogushanVault/*.h Pandaria/MogushanVault/*.cpp)
+file(GLOB_RECURSE sources_MogushanVaults Pandaria/MogushanVaults/*.h Pandaria/MogushanVaults/*.cpp)
 # Shadopan Monastery
 file(GLOB_RECURSE sources_ShadopanMonastery Pandaria/ShadopanMonastery/*.h Pandaria/ShadopanMonastery/*.cpp)
 # Siege of Niuzao Temple
-file(GLOB_RECURSE sources_SiegeNiuzaoTemple Pandaria/SiegeNiuzaoTemple/*.h Pandaria/SiegeNiuzaoTemple/*.cpp)
+file(GLOB_RECURSE sources_SiegeOfNiuzaoTemple Pandaria/SiegeOfNiuzaoTemple/*.h Pandaria/SiegeOfNiuzaoTemple/*.cpp)
 # Stormstout Brewery
 file(GLOB_RECURSE sources_StormstoutBrewery Pandaria/StormstoutBrewery/*.h Pandaria/StormstoutBrewery/*.cpp)
 # Temple of the Jade Serpent
-file(GLOB_RECURSE sources_TempleJadeSerpent Pandaria/TempleJadeSerpent/*.h Pandaria/TempleJadeSerpent/*.cpp)
+file(GLOB_RECURSE sources_TempleOfTheJadeSerpent Pandaria/TempleOfTheJadeSerpent/*.h Pandaria/TempleOfTheJadeSerpent/*.cpp)
 # Terrace of Endless Spring
 file(GLOB_RECURSE sources_TerraceOfEndlessSpring Pandaria/TerraceOfEndlessSpring/*.h Pandaria/TerraceOfEndlessSpring/*.cpp)
 # Throne of Thunder
@@ -41,14 +41,14 @@ file(GLOB_RECURSE sources_Zones Pandaria/Zones/*.h Pandaria/Zones/*.cpp)
 
 set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
-  ${sources_GateSettingSun}
+  ${sources_GateOfTheSettingSun}
   ${sources_HeartOfFear}
   ${sources_MogushanPalace}
-  ${sources_MogushanVault}
+  ${sources_MogushanVaults}
   ${sources_ShadopanMonastery}
-  ${sources_SiegeNiuzaoTemple}
+  ${sources_SiegeOfNiuzaoTemple}
   ${sources_StormstoutBrewery}
-  ${sources_TempleJadeSerpent}
+  ${sources_TempleOfTheJadeSerpent}
   ${sources_TerraceOfEndlessSpring}
   ${sources_ThroneOfThunder}
   ${sources_SiegeOfOrgrimmar}
