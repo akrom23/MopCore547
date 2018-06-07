@@ -68,8 +68,6 @@ enum GilneasSpells
 
     SPELL_GHOUL_TAUNT                       = 43263,
 
-    SPELL_ENRAGE                            = 8599,
-
     SPELL_GUARD_SHOOT_DEFAULT               = 20463,
     SPELL_GUARD_SHOOT_DEADLY                = 67595,
 
@@ -164,15 +162,14 @@ enum GilneasEvents
 
     EVENT_TALK                              = 11,
 
-    EVENT_FINISH_RUN                        = 12,
-    EVENT_RUN_AWAY                          = 13,
+    EVENT_RUN_AWAY                          = 12,
 
-    EVENT_START_RUN                         = 14,
-    EVENT_FINISH_RUN                        = 15,
+    EVENT_START_RUN                         = 13,
+    EVENT_FINISH_RUN                        = 14,
 
-    EVENT_CAST_FROSTBOLT                    = 16,
+    EVENT_CAST_FROSTBOLT                    = 15,
 
-    EVENT_UPDATE_PSC                        = 17,
+    EVENT_UPDATE_PSC                        = 16,
 };
 
 enum GilneasTypes

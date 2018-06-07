@@ -1572,7 +1572,7 @@ class npc_worgen_attacker_right  : public CreatureScript
                 {
                     worgenId = data;
                     me->GetMotionMaster()->MovePoint(0, WorgenPosRight[worgenId].runPos);
-                    events.ScheduleEvent(EVENT_JUMP, 20000);
+                    events.ScheduleEvent(EVENT_JUMP, 20 * IN_MILLISECONDS);
                 }
             }
 
