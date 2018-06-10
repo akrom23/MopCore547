@@ -13,6 +13,7 @@ enum Data
     DATA_TEMPEST            = 7,
     DATA_VENDOR_1           = 8,
     DATA_VENDOR_2           = 9,
+    DATA_ZULJINEVENT        = 10,
 };
 
 enum CreaturesIds

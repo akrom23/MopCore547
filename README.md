@@ -3,19 +3,18 @@
 
  INSTRUCTIONS:
  
-1) Client for this source can be fount here:
+1) Client exe files for this source can be fount here:
 
-x32: https://mega.nz/#!cZc30S6T!6R9zAlXkKE2ekBf7ZdnN_pQBnOxK5pyG3LNPEXT-0mU
-x64: https://github.com/MoPSource/MopCore547/files/1300178/Wow-64.zip
+x32: <source directory>/client/MoPCore547x32.rar
+x64: <source directory>/client/MoPCore547x64.rar
 
-2) If you alredy have the Mists of Pandaria 5.4.X, you can just put this client in the folder and start it
+2) If you already have the Mists of Pandaria 5.4.X, you can just put this client in the folder and start it.
 
-3) If you don't have Mists of Pandaria alredy, then just put this .exe file in empty folder start it and
+3) If you don't have Mists of Pandaria, then just put this .exe file in empty folder start it and
    after it is done loading exit game and change your config.wtf to your desired realmlist.
    
-4) Dbc, Db2, Maps, Mmaps and Vmaps can be found here:
-
-https://mega.nz/#!oN4AGLxZ!Bz6m_ZR9tGwfLyiU7xMUgnb4mgiF7QxUjRVLqHkd6IQ
+4) Dbc, Db2, Maps, Mmaps, Vmaps and full world database can be found
+   in section "Release" of this repository.
 
 5) Repack MopCore547-v13062017 for Quick Test here:
 
